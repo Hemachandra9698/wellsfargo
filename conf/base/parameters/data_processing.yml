@@ -25,6 +25,3 @@ material_data:
   file_name: "material_reference.csv"
   merge_on_col: "material_id"
 
-db_creds:
-  db_name: 'products_sqlite.db'
-  table_name: 'products'

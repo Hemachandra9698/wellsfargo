@@ -61,7 +61,8 @@ def map_material_id_with_name(
     )
 
 
-def store_to_sqlite_db(consolidated_ouput1: pd.DataFrame, parameters):
-    conn = sqlite_db.connect_to_db(parameters['db_creds']['db_name'])
-    consolidated_ouput1.to_sql(parameters['db_creds']['table_name'], conn, if_exists='replace')
+def store_to_sqlite_db(consolidated_ouput1: pd.DataFrame):
+    credentials = ct.get_credentials()
+    conn = sqlite_db.connect_to_db(credentials['db_creds']['db_name'])
+    consolidated_ouput1.to_sql(credentials['db_creds']['table_name'], conn, if_exists='replace')
     return consolidated_ouput1

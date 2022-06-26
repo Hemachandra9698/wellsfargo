@@ -49,7 +49,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             name='store_to_sqlite_node',
-            inputs=['consolidated_output1', 'parameters'],
+            inputs=['consolidated_output1'],
             func=store_to_sqlite_db,
             outputs='df_to_sqlite'
         )

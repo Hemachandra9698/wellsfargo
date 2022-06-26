@@ -1,4 +1,7 @@
+import os
+
 import pandas as pd
+from kedro.framework.session import KedroSession
 
 
 def add_file_name_as_col(df: pd.DataFrame, col_name: str, file_name: str):
@@ -24,3 +27,22 @@ def concat_data_frames(
     )
 
 
+def get_kedro_context():
+    with KedroSession.create(project_path=os.getcwd()) as session:
+        context = session.load_context()
+    return context
+
+
+def get_params():
+    context = get_kedro_context()
+    return context.params
+
+
+def get_credentials():
+    """
+    reads credentials.yml file in the project and returns in dict
+    :return: dictionary
+    """
+    context = get_kedro_context()
+    conf_loader = context.config_loader
+    return conf_loader.get("credentials*", "credentials*/**")

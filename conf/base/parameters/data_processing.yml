@@ -1,0 +1,30 @@
+# This is a boilerplate parameters config generated for pipeline 'data_processing'
+# using Kedro 0.18.1.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://kedro.readthedocs.io/en/0.18.1/kedro_project_setup/configuration.html#parameters
+
+# column name in which data file_names are added as value
+source_col_name: "source"
+data1:
+  file_name: "sample_data.1.csv"
+  worth: 1
+
+data2:
+  file_name: "sample_data.2.dat"
+  group_by: "product_name"
+  aggregation:
+    quality: 'first'
+    material_id: 'max'
+    worth: 'sum'
+
+data3:
+  file_name: "sample_data.3.dat"
+
+material_data:
+  file_name: "material_reference.csv"
+  merge_on_col: "material_id"
+
+db_creds:
+  db_name: 'products_sqlite.db'
+  table_name: 'products'

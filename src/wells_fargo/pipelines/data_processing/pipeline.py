@@ -25,7 +25,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             name='group_and_agg_processed_sample_data2_node',
-            inputs=['processed_sample_data2', 'parameters'],
+            inputs=['processed_sample_data2', 'params:data2'],
             func=group_and_agg_dataframe,
             outputs='data2_aggregation_results'
         ),
@@ -49,7 +49,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             name='store_to_sqlite_node',
-            inputs=['consolidated_output1', 'parameters'],
+            inputs=['consolidated_output1'],
             func=store_to_sqlite_db,
             outputs='df_to_sqlite'
         )

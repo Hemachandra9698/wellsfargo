@@ -1,0 +1,8 @@
+output_file:
+  file_name: "consolidated_output.1.csv"
+  file_path: "/data/output/consolidated_output.1.csv"
+
+db_creds:
+  db_name: 'products_sqlite.db'
+  db_path: '/products_sqlite.db'
+  table_name: 'products'

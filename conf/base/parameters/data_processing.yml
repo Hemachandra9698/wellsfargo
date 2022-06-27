@@ -24,4 +24,3 @@ data3:
 material_data:
   file_name: "material_reference.csv"
   merge_on_col: "material_id"
-

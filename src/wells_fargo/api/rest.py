@@ -15,7 +15,7 @@ class DBNotFoundError(Exception):
 
 class RestDataSource(DataSource):
     data_source_name = "REST"
-    BASE_DIR = os.getcwd() + "/../.."
+    BASE_DIR = os.path.normpath(os.getcwd() + "/../..")
     conf_path = "/conf/base/parameters.yml"
     PATTERN = r'^(?=.)([+-]?([0-9]*)(\.([0-9]+))?)$'
 

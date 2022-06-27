@@ -116,7 +116,7 @@ products_sqlite.db in the root dir -> contains the consolidated_output.1.csv rec
 ```
 * You could see the below output if your run is successful.
 
-![Kedro Run Passed](run_passed.png?raw=true "Kedro Run Passed")
+![Kedro Run Passed](images/run_passed.png?raw=true "Kedro Run Passed")
 
 ## Running Flask API for getting products.
 >>> NOTE: Please run FLASK server once the Kedro run is successful if not the API returns an error message as 
@@ -133,6 +133,8 @@ python src/wells_fargo/api/app.py -port 5001 -host 0.0.0.0
 ```
 http://127.0.0.1:5001/
 ```
+![Get Products](images/products.png?raw=true "Products")
+
 * For getting products which have product_name as `simple_thing`
 ```
 http://127.0.0.1:5001/?col_name=product_name&col_val=simple_thing
@@ -145,4 +147,5 @@ http://127.0.0.1:5001/?col_name=product_name&col_val=simple_thing
 http://127.0.0.1:5001/?col_name=material_id&col_val=2
 http://127.0.0.1:5001/?col_name=worth&col_val=2
 http://127.0.0.1:5001/?col_name=source&col_val=sample_data.2.dat
+http://127.0.0.1:5001/?col_name=quality&col_val=low
 ```

@@ -25,14 +25,17 @@ def get_filter_args():
 def index():
     filter_args = get_filter_args()
     products_df = rest_obj.get_products()
-    if not products_df.empty and filter_args:
-        filtered_products_df = rest_obj.filter_data(products_df, filter_args)
-        if filtered_products_df.empty:
-            return render_template_string('<b><h2>No values found in the products for {} with value: {}</h2></b>'.format(
-                filter_args['filter_col_name'],
-                filter_args['filter_col_val']
-            ))
-        return render_template_string(filtered_products_df.to_html())
+    if not products_df.empty:
+        if filter_args:
+            filtered_products_df = rest_obj.filter_data(products_df, filter_args)
+            if filtered_products_df.empty:
+                return render_template_string('<b><h2>No values found in the products for {} with value: {}</h2></b>'.format(
+                    filter_args['filter_col_name'],
+                    filter_args['filter_col_val']
+                ))
+            return render_template_string(filtered_products_df.to_html())
+        return render_template_string(products_df.to_html())
+
     return render_template('products_not_found.html')
 
 

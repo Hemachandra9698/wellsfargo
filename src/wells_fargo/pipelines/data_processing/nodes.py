@@ -6,11 +6,9 @@ generated using Kedro 0.18.1
 import pandas as pd
 
 from wells_fargo.pipelines.data_processing.db import sqlite_db
-from wells_fargo.pipelines.data_processing.transformers import common as ct
-from wells_fargo.pipelines.data_processing.transformers import data1_transformer as dt1
-from wells_fargo.pipelines.data_processing.transformers import data2_transformer as dt2
-from wells_fargo.pipelines.data_processing.transformers import data3_transformer as dt3
-from wells_fargo.pipelines.data_processing.transformers import material_data_transformer as mt
+from wells_fargo.pipelines.data_processing.transformers import common as common_transformer
+from wells_fargo.pipelines.data_processing.transformers import rest_transformer
+from wells_fargo.pipelines.data_processing.transformers import material_data_transformer as material_transformer
 
 
 def process_sample_data1(sample_data1: pd.DataFrame, parameters):
@@ -21,13 +19,13 @@ def process_sample_data1(sample_data1: pd.DataFrame, parameters):
     :param parameters: dict of parameters read from conf/base/parameters/<pipeline-name>.yml
     :return: processed pandas dataframe
     """
-    sample_data1 = ct.add_file_name_as_col(
+    sample_data1 = common_transformer.add_file_name_as_col(
         sample_data1,
         parameters.get('source_col_name', 'source'),
         parameters['data1']['file_name']
     )
     # filter records which have worth column less than 1
-    return dt1.filter_rows_with_less_than_a_worth(sample_data1, parameters['data1']['worth'])
+    return rest_transformer.filter_rows_with_less_than_a_worth(sample_data1, parameters['data1']['worth'])
 
 
 def group_and_agg_dataframe(processed_sample_data2: pd.DataFrame, data_param_name):
@@ -38,9 +36,9 @@ def group_and_agg_dataframe(processed_sample_data2: pd.DataFrame, data_param_nam
     :return:
     """
     # apply group_by
-    df = dt2.group_by(processed_sample_data2, data_param_name['group_by'])
+    df = rest_transformer.group_by(processed_sample_data2, data_param_name['group_by'])
     # apply aggregation
-    return dt2.aggregate(df, data_param_name['aggregation'])
+    return rest_transformer.aggregate(df, data_param_name['aggregation'])
 
 
 def process_sample_data2(sample_data2: pd.DataFrame, parameters):
@@ -51,7 +49,7 @@ def process_sample_data2(sample_data2: pd.DataFrame, parameters):
     :param parameters: dict of parameters read from conf/base/parameters/<pipeline-name>.yml
     :return: processed pandas dataframe
     """
-    sample_data2 = ct.add_file_name_as_col(
+    sample_data2 = common_transformer.add_file_name_as_col(
         sample_data2,
         parameters['source_col_name'],
         parameters['data2']['file_name']
@@ -67,13 +65,13 @@ def process_sample_data3(sample_data3: pd.DataFrame, parameters):
     :param parameters: dict of parameters read from conf/base/parameters/<pipeline-name>.yml
     :return: processed pandas dataframe
     """
-    sample_data3 = ct.add_file_name_as_col(
+    sample_data3 = common_transformer.add_file_name_as_col(
         sample_data3,
         parameters['source_col_name'],
         parameters['data3']['file_name']
     )
     # re calculate worth values by multiplying worth with material_id column values
-    return dt3.re_calculate_worth(sample_data3)
+    return rest_transformer.re_calculate_worth(sample_data3)
 
 
 def map_material_id_with_name(
@@ -89,7 +87,7 @@ def map_material_id_with_name(
     :param parameters: dict of parameters read from conf/base/parameters/<pipeline-name>.yml
     :return: merged dataframe
     """
-    return mt.map_id_with_name(
+    return material_transformer.map_id_with_name(
         material_reference,
         concat_sample_data_frame,
         parameters['material_data']['merge_on_col']
@@ -103,7 +101,7 @@ def store_to_sqlite_db(consolidated_ouput1: pd.DataFrame):
     :param consolidated_ouput1: final pandas dataframe to be stored into db
     :return: pandas dataframe
     """
-    credentials = ct.get_credentials()
+    credentials = common_transformer.get_credentials()
     conn = sqlite_db.connect_to_db(credentials['db_creds']['db_name'])
     consolidated_ouput1.to_sql(credentials['db_creds']['table_name'], conn, if_exists='replace', index=False)
     return consolidated_ouput1
